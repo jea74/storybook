@@ -366,6 +366,9 @@ public abstract class AbstractEntity implements Serializable {
 	public String getClean(Strand strand) {
 		return(strand!=null?strand.getId().toString():"");
 	}
+	public String getClean(Species species) { // New method to get a clean Species object 
+		return(species!=null?species.getId().toString():"");
+	}
 	public String getCleanId(AbstractEntity entity) {
 		return(entity!=null?entity.getId().toString():"");
 	}

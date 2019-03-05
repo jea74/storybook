@@ -53,6 +53,7 @@ import storybook.model.hbn.entity.Part;
 import storybook.model.hbn.entity.Person;
 import storybook.model.hbn.entity.Relationship;
 import storybook.model.hbn.entity.Scene;
+import storybook.model.hbn.entity.Species;
 import storybook.model.hbn.entity.Strand;
 import storybook.model.hbn.entity.Tag;
 import storybook.model.hbn.entity.TagLink;
@@ -190,6 +191,7 @@ public class SbMenu {
     private JMenuItem newPerson;
     private JMenuItem newRelationships;
     private JMenuItem newScene;
+    private JMenuItem newSpecies; // New Species menu item 
     private JMenuItem newStrand;
     private JMenuItem newTag;
     private JMenuItem newTagLink;
@@ -823,6 +825,12 @@ public class SbMenu {
 			mainFrame.newEntity(new Gender());
 		});
         menuNewEntity.add(newGender);
+        
+        newSpecies = initMenuItem("16x16/specchar","",' ',"species","newSpecies"); // New statement to initialize Species menu item
+        newSpecies.addActionListener((ActionEvent evt) -> {
+			mainFrame.newEntity(new Species());
+		});
+        menuNewEntity.add(newSpecies);
 
         newCategory = initMenuItem("16x16/category","",' ',"persons.category","newCategory");
         newCategory.addActionListener((ActionEvent evt) -> {

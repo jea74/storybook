@@ -43,6 +43,7 @@ import storybook.model.hbn.dao.PartDAOImpl;
 import storybook.model.hbn.dao.PersonDAOImpl;
 import storybook.model.hbn.dao.RelationshipDAOImpl;
 import storybook.model.hbn.dao.SceneDAOImpl;
+import storybook.model.hbn.dao.SpeciesDAOImpl;
 import storybook.model.hbn.dao.StrandDAOImpl;
 import storybook.model.hbn.dao.TagDAOImpl;
 import storybook.model.hbn.dao.TagLinkDAOImpl;
@@ -62,6 +63,7 @@ import storybook.model.hbn.entity.Part;
 import storybook.model.hbn.entity.Person;
 import storybook.model.hbn.entity.Relationship;
 import storybook.model.hbn.entity.Scene;
+import storybook.model.hbn.entity.Species;
 import storybook.model.hbn.entity.Strand;
 import storybook.model.hbn.entity.Tag;
 import storybook.model.hbn.entity.TagLink;
@@ -133,6 +135,10 @@ public class BookModel extends AbstractModel {
 		Category minor = new Category(2, I18N.getMsg("category.minor_character"), null);
 		session_save(session,minor);
 
+		// default species - Human
+		Species human = new Species(I18N.getMsg("person.species.human"));
+		session_save(session,human);
+		
 		commit();
 	}
 
@@ -169,6 +175,7 @@ public class BookModel extends AbstractModel {
 		fireAgainPlan();
 		fireAgainRelationships();
 		fireAgainScenes();
+		fireAgainSpecies(); // New fireAgainSpecies() method
 		fireAgainStrands();
 		fireAgainTags();
 		fireAgainTagLinks();
@@ -201,6 +208,8 @@ public class BookModel extends AbstractModel {
 			fireAgainRelationships();
 		} else if (ViewName.GENDERS.compare(view)) {
 			fireAgainGenders();
+		} else if (ViewName.SPECIES.compare(view)) { // New else if statement for comparing Species views
+			fireAgainSpecies();
 		} else if (ViewName.CATEGORIES.compare(view)) {
 			fireAgainCategories();
 		} else if (ViewName.ATTRIBUTES.compare(view)) {
@@ -293,6 +302,15 @@ public class BookModel extends AbstractModel {
 		firePropertyChange(BookController.GenderProps.INIT.toString(), null, genders);
 	}
 
+	private void fireAgainSpecies() { // New method for firing Species
+		SbApp.trace("BookModel.fireAgainSpecies()");
+		Session session = beginTransaction();
+		SpeciesDAOImpl dao = new SpeciesDAOImpl(session);
+		List<Species> species = dao.findAll();
+		commit();
+		firePropertyChange(BookController.SpeciesProps.INIT.toString(), null, species);
+	}
+	
 	private void fireAgainCategories() {
 		SbApp.trace("BookModel.fireAgainCategories()");
 		Session session = beginTransaction();
@@ -462,6 +480,10 @@ public class BookModel extends AbstractModel {
 		setShowInfo((AbstractEntity) gender);
 	}
 
+	public void setShowInfo(Species species) {
+		setShowInfo((AbstractEntity) species);
+	}
+	
 	public void setShowInfo(Location location) {
 		setShowInfo((AbstractEntity) location);
 	}
@@ -1021,7 +1043,7 @@ public class BookModel extends AbstractModel {
 		}
 	}
 
-	// gender
+	// attributes
 	public void setEditAttribute(Attribute entity) {
 		editEntity((AbstractEntity) entity);
 	}
@@ -1089,7 +1111,66 @@ public class BookModel extends AbstractModel {
 			firePropertyChange(BookController.AttributeProps.DELETE.toString(), old, null);
 		}
 	}
+	
+	// species - New methods to edit, update, create, and delete a Species entity
+	public void setEditSpecies(Species entity) {
+		editEntity((AbstractEntity) entity);
+	}
+	
+	public synchronized void setUpdateSpecies(Species entity) {
+		Session session = beginTransaction();
+		SpeciesDAOImpl dao = new SpeciesDAOImpl(session);
+		Species old = dao.find(entity.getId());
+		commit();
+		session = beginTransaction();
+		session_update(session,entity);
+		commit();
+		mainFrame.setUpdated(true);
+		firePropertyChange(BookController.SpeciesProps.UPDATE.toString(), old, entity);
+	}
+	
+	public synchronized void setNewSpecies(Species entity) {
+		Session session = beginTransaction();
+		session_save(session,entity);
+		commit();
+		firePropertyChange(BookController.SpeciesProps.NEW.toString(), null, entity);
+	}
 
+	public synchronized void setDeleteSpecies(Species entity) {
+		if (entity.getId() == null) {
+			return;
+		}
+		// set species of affected persons to "human"
+		Session session = beginTransaction();
+		SpeciesDAOImpl dao = new SpeciesDAOImpl(session);
+		Species human = dao.findHuman();
+		List<Person> persons = dao.findPersons(entity);
+		commit();
+		for (Person person : persons) {
+			person.setSpecies(human);
+			setUpdatePerson(person);
+		}
+		// delete species
+		session = beginTransaction();
+		session.delete(entity);
+		commit();
+		firePropertyChange(BookController.SpeciesProps.DELETE.toString(), entity, null);
+	}
+	
+	public synchronized void setDeleteMultiSpecies(ArrayList<Long> ids) {
+		for (Long id : ids) {
+			Session session = beginTransaction();
+			SpeciesDAOImpl dao = new SpeciesDAOImpl(session);
+			Species old = dao.find(id);
+			commit();
+			session = beginTransaction();
+			dao = new SpeciesDAOImpl(session);
+			dao.removeById(id);
+			commit();
+			firePropertyChange(BookController.SpeciesProps.DELETE.toString(), old, null);
+		}
+	}
+	
 	// category
 	public void setEditCategory(Category entity) {
 		editEntity((AbstractEntity) entity);

@@ -60,6 +60,7 @@ import storybook.ui.table.renderer.PersonTableCellRenderer;
 import storybook.ui.table.renderer.PersonsTableCellRenderer;
 import storybook.ui.table.renderer.SceneIdTableCellRenderer;
 import storybook.ui.table.renderer.SceneStateTableCellRenderer;
+import storybook.ui.table.renderer.SpeciesTableCellRenderer;
 import storybook.ui.table.renderer.StrandTableCellRenderer;
 import storybook.ui.table.renderer.StrandsTableCellRenderer;
 import storybook.ui.table.renderer.TimeEventFormatTableCellRenderer;
@@ -330,6 +331,10 @@ public class SbColumnFactory {
 		col.setCompleter(abbrCompleter);
 		columns.add(col);
 
+		col = new SbColumn(i++, "Species", InputType.COMBOBOX, "manage.persons.species"); // New statement to get Species column in Persons view 
+		col.setTableCellRenderer(new SpeciesTableCellRenderer());
+		columns.add(col);
+		
 		col = new SbColumn(i++, "Gender", InputType.COMBOBOX, "manage.persons.gender");
 		col.setTableCellRenderer(new GenderTableCellRenderer());
 		columns.add(col);
@@ -480,6 +485,24 @@ public class SbColumnFactory {
 
 		col = new SbColumn(i++, "Retirement", "chart.gantt.retirement");
 		col.setVerifier(new IntegerVerifier(true));
+		columns.add(col);
+
+		return columns;
+	}
+	
+	public Vector<SbColumn> getSpeciesColumns() { // New method to get Species columns
+		int i=1;
+		Vector<SbColumn> columns = new Vector<SbColumn>();
+		columns.add(getIdColumn());
+
+		SbColumn col = new SbColumn(i++, "Name", "person.species.name");
+		col.setMaxLength(255);
+		col.setGrowX(true);
+		VerifierGroup group = new VerifierGroup();
+		group.addVerifier(new NotEmptyVerifier());
+		group.addVerifier(new LengthVerifier(col.getMaxLength()));
+		col.setVerifier(group);
+		col.setDefaultSort(true);
 		columns.add(col);
 
 		return columns;

@@ -287,6 +287,7 @@ public class SbConstants {
 		CATEGORIES("Categories"),
 		ATTRIBUTES("Attributes"),
 		ATTRIBUTESLIST("AttributesList"),
+		SPECIES("Species"), // Enum value for Species
 		STRANDS("Strands"),
 		IDEAS("Ideas"),
 		TAGS("Tags"),
