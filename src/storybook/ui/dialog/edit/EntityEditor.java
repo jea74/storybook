@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -994,6 +995,8 @@ public class EntityEditor extends AbstractPanel implements ActionListener, ItemL
 						break;
 					}
 				}
+				
+				//Gets the return type of the data in the column
 				String methodName = "get" + col.getMethodName();
 				Method method = entity.getClass().getMethod(methodName);
 				Type type = method.getReturnType();
@@ -1032,7 +1035,7 @@ public class EntityEditor extends AbstractPanel implements ActionListener, ItemL
 							val = null;
 						}
 					} else {
-						val = (Location) objVal;
+						val = (Location) objVal;						
 					}
 					types = new Class[]{Location.class};
 				} else if (type == Scene.class) {
@@ -1124,6 +1127,7 @@ public class EntityEditor extends AbstractPanel implements ActionListener, ItemL
 					val = (Icon) objVal;
 					types = new Class[]{Icon.class};
 				}
+				//sets the attributes of a given entity
 				if (col.getInputType() != InputType.ATTRIBUTES && col.getInputType() != InputType.NONE) {
 					if (!col.getMethodName().isEmpty()) {
 						methodName = "set" + col.getMethodName();
@@ -1242,6 +1246,11 @@ public class EntityEditor extends AbstractPanel implements ActionListener, ItemL
 
 	private void addOrUpdateEntity() {
 		SbApp.trace("EntityEditor.addOrUpdateEntity()");
+		
+		if(!entityHandler.verifyNoDuplicates(inputComponents)) {
+			return;
+		}
+		
 		try {
 			updateEntityFromInputComponents();
 			if (entity.isTransient()) {
