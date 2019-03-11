@@ -1248,6 +1248,8 @@ public class EntityEditor extends AbstractPanel implements ActionListener, ItemL
 		SbApp.trace("EntityEditor.addOrUpdateEntity()");
 		
 		if(!entityHandler.verifyNoDuplicates(inputComponents)) {
+			errorState = ErrorState.ERROR;
+			setMsgState(MsgState.ERRORS);
 			return;
 		}
 		
