@@ -13,8 +13,10 @@ import junit.framework.TestCase;
 import storybook.SbConstants.ClientPropertyName;
 import storybook.model.BookModel;
 import storybook.model.EntityUtil;
+import storybook.model.handler.LocationEntityHandler;
 import storybook.model.handler.SpeciesEntityHandler;
 import storybook.model.hbn.dao.SpeciesDAOImpl;
+import storybook.model.hbn.entity.Location;
 import storybook.model.hbn.entity.Species;
 import storybook.ui.MainFrame;
 
@@ -27,14 +29,14 @@ public class LocationTest extends TestCase {
 
    protected void setUp(){
 	   mainFrame = new MainFrame();
-	   tester = new SpeciesEntityHandler(mainFrame);
-	   origEntity = new SpeciesEntityHandler(mainFrame);
+	   tester = new LocationEntityHandler(mainFrame);
+	   origEntity = new LocationEntityHandler(mainFrame);
 	   inputComponents = new ArrayList<>();
    }
 
    @Test
    public void testLocationAlreadyExists(){
-   	Location.location = new Location();
+   	Location location = new Location();
    	location.setName("test");
    	location.setAddress("test");
    	location.setCity("test");
@@ -44,7 +46,7 @@ public class LocationTest extends TestCase {
    	comp.putClientProperty(3,location.getCity());
    	comp.putClientProperty(4,location.getCountry());
 
-   	inputComponents.add(comp)
+   	inputComponents.add(comp);
    	tester.newEntity(location);
    	tester.createNewEntity();
 
