@@ -32,6 +32,7 @@ import storybook.model.hbn.entity.AbstractEntity;
 import storybook.model.hbn.entity.Category;
 import storybook.model.hbn.entity.Gender;
 import storybook.model.hbn.entity.Person;
+import storybook.model.hbn.entity.Species;
 import storybook.ui.MainFrame;
 import storybook.ui.SbView;
 
@@ -67,6 +68,8 @@ public class PersonTable extends AbstractTable {
 				updateGenders(evt);
 			} else if (BookController.CategoryProps.UPDATE.check(propName)) {
 				updateCategories(evt);
+			} else if (BookController.SpeciesProps.UPDATE.check(propName)) { // New else if statement to update Species 
+				updateSpecies(evt);
 			} else if (BookController.CommonProps.EXPORT.check(propName) 
 				&& ((SbView)evt.getNewValue()).getName().equals("Persons")) {
 				TableExporter.exportTable(mainFrame,(SbView)evt.getNewValue());
@@ -92,6 +95,16 @@ public class PersonTable extends AbstractTable {
 		for (int row = 0; row < tableModel.getRowCount(); ++row) {
 			if (oldGender.equals(newGender)) {
 				tableModel.setValueAt(newGender, row, 1);
+			}
+		}
+	}
+	
+	private void updateSpecies(PropertyChangeEvent evt) { // New method to update Species 
+		Species oldSpecies = (Species) evt.getOldValue();
+		Species newSpecies = (Species) evt.getNewValue();
+		for (int row = 0; row < tableModel.getRowCount(); ++row) {
+			if (oldSpecies.equals(newSpecies)) {
+				tableModel.setValueAt(newSpecies, row, 1);
 			}
 		}
 	}

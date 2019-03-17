@@ -71,6 +71,7 @@ import storybook.ui.table.PartTable;
 import storybook.ui.table.PersonTable;
 import storybook.ui.table.RelationshipTable;
 import storybook.ui.table.SceneTable;
+import storybook.ui.table.SpeciesTable;
 import storybook.ui.table.StrandTable;
 import storybook.ui.table.TagLinkTable;
 import storybook.ui.table.TagTable;
@@ -134,6 +135,8 @@ public class ViewFactory {
 			title="relationship";
 		} else if (ViewName.GENDERS.compare(view)) {
 			title="genders";
+		} else if (ViewName.SPECIES.compare(view)) { // New statement to get Species View title
+			title="persons.species";
 		} else if (ViewName.CATEGORIES.compare(view)) {
 			title="persons.categories";
 		} else if (ViewName.STRANDS.compare(view)) {
@@ -204,6 +207,8 @@ public class ViewFactory {
 				return getRelationshipsView();
 			case GENDERS:
 				return getGendersView();
+			case SPECIES: // New case to get Species View 
+				return getSpeciesView();
 			case CATEGORIES:
 				return getCategoriesView();
 			case STRANDS:
@@ -315,6 +320,9 @@ public class ViewFactory {
 		} else if (ViewName.GENDERS.compare(view)) {
 			comp = new GenderTable(mainFrame);
 			isTable = true;
+		} else if (ViewName.SPECIES.compare(view)) { // New else if statement to get Species table 
+			comp = new SpeciesTable(mainFrame);
+			isTable = true;
 		} else if (ViewName.CATEGORIES.compare(view)) {
 			comp = new CategoryTable(mainFrame);
 			isTable = true;
@@ -386,6 +394,7 @@ public class ViewFactory {
 				ViewName.PERSONS.compare(view) ||
 				ViewName.RELATIONSHIPS.compare(view) ||
 				ViewName.GENDERS.compare(view) ||
+				ViewName.SPECIES.compare(view) || // New statement to unload the Species view
 				ViewName.CATEGORIES.compare(view) ||
 				ViewName.STRANDS.compare(view) ||
 				ViewName.IDEAS.compare(view) ||
@@ -570,6 +579,17 @@ public class ViewFactory {
 		return (SbView) viewMap.getView(ViewName.GENDERS.toString());
 	}
 
+	public SbView getSpeciesView() { // New method to get Species view 
+		SbApp.trace("ViewFactory.getSpeciesView()");
+		if (isViewInitialized(ViewName.SPECIES)) {
+			SbView view = new SbView(I18N.getMsg("species"));
+			view.setName(ViewName.SPECIES.toString());
+			addButtons(view,EXPORT);
+			viewMap.addView(view.getName(), view);
+		}
+		return (SbView) viewMap.getView(ViewName.SPECIES.toString());
+	}
+	
 	public SbView getCategoriesView() {
 		SbApp.trace("ViewFactory.getCategoriesView()");
 		if (isViewInitialized(ViewName.CATEGORIES)) {
@@ -935,6 +955,7 @@ public class ViewFactory {
 				!ViewName.PERSONS.compare(view) &&
 				!ViewName.RELATIONSHIPS.compare(view) &&
 				!ViewName.GENDERS.compare(view) &&
+				!ViewName.SPECIES.compare(view) && // New statement to save the Species table view 
 				!ViewName.CATEGORIES.compare(view) &&
 				!ViewName.STRANDS.compare(view) &&
 				!ViewName.IDEAS.compare(view) &&

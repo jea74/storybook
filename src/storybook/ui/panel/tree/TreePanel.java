@@ -66,6 +66,7 @@ import storybook.model.hbn.dao.LocationDAOImpl;
 import storybook.model.hbn.dao.MemoDAOImpl;
 import storybook.model.hbn.dao.PartDAOImpl;
 import storybook.model.hbn.dao.PersonDAOImpl;
+import storybook.model.hbn.dao.SpeciesDAOImpl;
 import storybook.model.hbn.dao.StrandDAOImpl;
 import storybook.model.hbn.dao.TagDAOImpl;
 import storybook.model.hbn.dao.TagLinkDAOImpl;
@@ -81,6 +82,7 @@ import storybook.model.hbn.entity.Memo;
 import storybook.model.hbn.entity.Part;
 import storybook.model.hbn.entity.Person;
 import storybook.model.hbn.entity.Scene;
+import storybook.model.hbn.entity.Species;
 import storybook.model.hbn.entity.Strand;
 import storybook.model.hbn.entity.Tag;
 import storybook.model.hbn.entity.TagLink;
@@ -119,10 +121,11 @@ public class TreePanel extends AbstractPanel implements TreeSelectionListener, M
 	private ToggleIconButton btToogleParts;
 	private ToggleIconButton btToogleIdeas;
 	private List<ToggleIconButton> toggleButtonList;
-
+	
 	private DefaultMutableTreeNode topNode;
 	private EntityNode personsByCategoryNode;
 	private EntityNode personsByGendersNode;
+	private EntityNode personsBySpeciesNode; // New entity node for Species 
 	private EntityNode locationsNode;
 	private EntityNode scenesNode;
 	private EntityNode tagsNode;
@@ -329,6 +332,9 @@ public class TreePanel extends AbstractPanel implements TreeSelectionListener, M
 			personsByGendersNode = new EntityNode("tree.persons.by.gender", new Gender());
 			topNode.add(personsByGendersNode);
 			refreshPersonsByGender();
+			personsBySpeciesNode = new EntityNode("tree.persons.by.species", new Species()); // New statements to add Species node to refresh
+			topNode.add(personsBySpeciesNode);
+			refreshPersonsBySpecies();
 		}
 		if (btToogleLocations.isSelected()) {
 			locationsNode = new EntityNode("locations", new Location());
@@ -491,7 +497,24 @@ public class TreePanel extends AbstractPanel implements TreeSelectionListener, M
 		}
 		return categoryNode;
 	}
-
+	
+	private void refreshPersonsBySpecies() { // New refresh method for persons by Species
+		BookModel model = mainFrame.getBookModel();
+		Session session = model.beginTransaction();
+		SpeciesDAOImpl speciesDao = new SpeciesDAOImpl(session);
+		List<Species> species = speciesDao.findAll();
+		for (Species sp : species) {
+			DefaultMutableTreeNode speciesNode = new DefaultMutableTreeNode(sp);
+			personsBySpeciesNode.add(speciesNode);
+			List<Person> persons = speciesDao.findPersons(sp);
+			for (Person person : persons) {
+				DefaultMutableTreeNode personNode = new DefaultMutableTreeNode(person);
+				speciesNode.add(personNode);
+			}
+		}
+		model.commit();
+	}
+	
 	private void refreshPersonsByGender() {
 		BookModel model = mainFrame.getBookModel();
 		Session session = model.beginTransaction();

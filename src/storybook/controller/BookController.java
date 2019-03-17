@@ -38,6 +38,7 @@ import storybook.model.hbn.entity.Part;
 import storybook.model.hbn.entity.Person;
 import storybook.model.hbn.entity.Relationship;
 import storybook.model.hbn.entity.Scene;
+import storybook.model.hbn.entity.Species;
 import storybook.model.hbn.entity.Strand;
 import storybook.model.hbn.entity.Tag;
 import storybook.model.hbn.entity.TagLink;
@@ -446,6 +447,31 @@ public class BookController extends AbstractController {
 		}
 	};
 
+	public enum SpeciesProps {
+		
+		INIT("InitSpecies"),
+		EDIT("EditSpecies"),
+		EXPORT("ExportSpecies"),
+		DELETE("DeleteSpecies"),
+		DELETE_MULTI("DeleteMultiSpecies"),
+		NEW("NewSpecies"),
+		UPDATE("UpdateSpecies");
+		final private String text;
+
+		private SpeciesProps(String text) {
+			this.text = text;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+
+		public boolean check(String prop) {
+			return text.equals(prop);
+		}
+	};
+	
 	public enum CategoryProps {
 
 		INIT("InitCategories"),
@@ -746,6 +772,8 @@ public class BookController extends AbstractController {
 				updateRelationship((Relationship) entity);
 			} else if (entity instanceof Gender) {
 				updateGender((Gender) entity);
+			} else if (entity instanceof Species) { // New else if statement to update Species
+				updateSpecies((Species) entity);
 			} else if (entity instanceof Category) {
 				updateCategory((Category) entity);
 			} else if (entity instanceof Strand) {
@@ -791,6 +819,8 @@ public class BookController extends AbstractController {
 				deleteRelationship((Relationship) entity);
 			} else if (entity instanceof Gender) {
 				deleteGender((Gender) entity);
+			} else if (entity instanceof Species) { // New else if statement to delete Species
+				deleteSpecies((Species) entity);
 			} else if (entity instanceof Category) {
 				deleteCategory((Category) entity);
 			} else if (entity instanceof Attribute) {
@@ -836,6 +866,8 @@ public class BookController extends AbstractController {
 				newRelationship((Relationship) entity);
 			} else if (entity instanceof Gender) {
 				newGender((Gender) entity);
+			} else if (entity instanceof Species) { // New else if statement to create new Species
+				newSpecies((Species) entity);
 			} else if (entity instanceof Category) {
 				newCategory((Category) entity);
 			} else if (entity instanceof Strand) {
@@ -881,6 +913,8 @@ public class BookController extends AbstractController {
 				setRelationshipToEdit((Relationship) entity);
 			} else if (entity instanceof Gender) {
 				setGenderToEdit((Gender) entity);
+			} else if (entity instanceof Species) { // New else if statement to edit Species
+				setSpeciesToEdit((Species) entity);
 			} else if (entity instanceof Category) {
 				setCategoryToEdit((Category) entity);
 			} else if (entity instanceof Strand) {
@@ -1153,6 +1187,27 @@ public class BookController extends AbstractController {
 
 	public void setGenderToEdit(Gender genderToEdit) {
 		setModelProperty(GenderProps.EDIT.toString(), genderToEdit);
+	}
+	
+	// species - Methods to perform several actions on Species objects
+	public void updateSpecies(Species species) {
+		setModelProperty(SpeciesProps.UPDATE.toString(), species);
+	}
+	
+	public void newSpecies(Species newSpecies) {
+		setModelProperty(SpeciesProps.NEW.toString(), newSpecies);
+	}
+	
+	public void deleteSpecies(Species speciesToDeleted) {
+		setModelProperty(SpeciesProps.DELETE.toString(), speciesToDeleted);
+	}
+
+	public void deleteMultiSpecies(ArrayList<Long> ids) {
+		setModelProperty(SpeciesProps.DELETE_MULTI.toString(), ids);
+	}
+
+	public void setSpeciesToEdit(Species speciesToEdit) {
+		setModelProperty(SpeciesProps.EDIT.toString(), speciesToEdit);
 	}
 
 	// attributes

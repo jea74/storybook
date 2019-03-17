@@ -100,6 +100,7 @@ public class SbSessionFactory {
 			config.addClass(storybook.model.hbn.entity.Idea.class);
 			config.addClass(storybook.model.hbn.entity.Internal.class);
 			config.addClass(storybook.model.hbn.entity.Category.class);
+			config.addClass(storybook.model.hbn.entity.Species.class); // Added Species class to configFile
 			config.addClass(storybook.model.hbn.entity.Attribute.class);
 			config.addClass(storybook.model.hbn.entity.TimeEvent.class);
 			sessionFactory = config.buildSessionFactory();

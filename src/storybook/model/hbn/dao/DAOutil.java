@@ -36,6 +36,10 @@ public class DAOutil {
 		return(new GenderDAOImpl(m.getSession()));
 	}
 	
+	public static SpeciesDAOImpl getSpeciesDAO(MainFrame m) { // Added SpeciesDAOImpl method
+		return (new SpeciesDAOImpl(m.getSession()));
+	}
+	
 	public static StrandDAOImpl getStrandDAO(MainFrame m) {
 		return(new StrandDAOImpl(m.getSession()));
 	}

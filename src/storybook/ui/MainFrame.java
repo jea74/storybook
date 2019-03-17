@@ -328,6 +328,7 @@ public class MainFrame extends JFrame implements IPaintable {
 		SbView personsView = getView(ViewName.PERSONS);
 		SbView relationshipView = getView(ViewName.RELATIONSHIPS);
 		SbView gendersView = getView(ViewName.GENDERS);
+		SbView speciesView = getView(ViewName.SPECIES); // New SbView object to get Species View
 		SbView categoriesView = getView(ViewName.CATEGORIES);
 		SbView attributesView = getView(ViewName.ATTRIBUTES);
 		SbView attributesListView = getView(ViewName.ATTRIBUTESLIST);
@@ -387,6 +388,7 @@ public class MainFrame extends JFrame implements IPaintable {
 		personsView.close();
 		relationshipView.close();
 		gendersView.close();
+		speciesView.close(); // New close statement for SpeciesView
 		categoriesView.close();
 		attributesView.close();
 		attributesListView.close();

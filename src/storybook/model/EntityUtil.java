@@ -79,6 +79,7 @@ import storybook.model.handler.PartEntityHandler;
 import storybook.model.handler.PersonEntityHandler;
 import storybook.model.handler.RelationshipEntityHandler;
 import storybook.model.handler.SceneEntityHandler;
+import storybook.model.handler.SpeciesEntityHandler;
 import storybook.model.handler.StrandEntityHandler;
 import storybook.model.handler.TagEntityHandler;
 import storybook.model.handler.TagLinkEntityHandler;
@@ -95,6 +96,7 @@ import storybook.model.hbn.dao.PartDAOImpl;
 import storybook.model.hbn.dao.PersonDAOImpl;
 import storybook.model.hbn.dao.SbGenericDAOImpl;
 import storybook.model.hbn.dao.SceneDAOImpl;
+import storybook.model.hbn.dao.SpeciesDAOImpl;
 import storybook.model.hbn.dao.StrandDAOImpl;
 import storybook.model.hbn.dao.TagDAOImpl;
 import storybook.model.hbn.dao.TagLinkDAOImpl;
@@ -115,6 +117,7 @@ import storybook.model.hbn.entity.Part;
 import storybook.model.hbn.entity.Person;
 import storybook.model.hbn.entity.Relationship;
 import storybook.model.hbn.entity.Scene;
+import storybook.model.hbn.entity.Species;
 import storybook.model.hbn.entity.Strand;
 import storybook.model.hbn.entity.Tag;
 import storybook.model.hbn.entity.TagLink;
@@ -314,6 +317,8 @@ public class EntityUtil {
 		} else if (entity instanceof Gender) {
 			ret.add(1L);
 			ret.add(2L);
+		} else if (entity instanceof Species) { // New else if statement to get read only Ids
+			ret.add(1L);
 		} else if (entity instanceof Part) {
 			ret.add(1L);
 		} else if (entity instanceof Strand) {
@@ -776,8 +781,11 @@ public class EntityUtil {
 		if (entity instanceof Relationship) {
 			return new RelationshipEntityHandler(mainFrame);
 		}
-		if (entity instanceof Gender) {
+		if (entity instanceof Gender) { 
 			return new GenderEntityHandler(mainFrame);
+		}
+		if (entity instanceof Species) { // New if statement to get the Species entity handler
+			return new SpeciesEntityHandler(mainFrame);
 		}
 		if (entity instanceof Category) {
 			return new CategoryEntityHandler(mainFrame);
@@ -824,6 +832,9 @@ public class EntityUtil {
 		}
 		if (entity instanceof Category) {
 			return Category.class;
+		}
+		if (entity instanceof Species) { // New if statement to get the Species class
+			return Species.class;
 		}
 		if (entity instanceof Gender) {
 			return Gender.class;
@@ -1450,6 +1461,9 @@ public class EntityUtil {
 		if (obj instanceof Part || method.getReturnType() == Part.class) {
 			return new PartEntityHandler(mainFrame);
 		}
+		if (obj instanceof Species || method.getReturnType() == Species.class) { // New if statement to call the Species entity handler
+			return new SpeciesEntityHandler(mainFrame);
+		}
 		if (obj instanceof Category || method.getReturnType() == Category.class) {
 			return new CategoryEntityHandler(mainFrame);
 		}
@@ -1672,6 +1686,21 @@ public class EntityUtil {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static Species fillSpeciesCombo(MainFrame mainFrame, String sel) { // New method to fill the Species combobox
+		BookModel model = mainFrame.getBookModel();
+		Session session = model.beginTransaction();
+		SpeciesDAOImpl dao = new SpeciesDAOImpl(session);
+		List<Species> species = dao.findAll();
+		model.commit();
+		for (Species s: species) {
+			if (sel.equals(s.getName())) {
+				return(s);
+			}
+		}
+		return(null);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public static void fillEntityCheckBoxList(MainFrame mainFrame, CheckBoxList list, AbstractEntity entity) {
 		DefaultListModel<JCheckBox> ckmodel = new DefaultListModel<>();
 		ckmodel.removeAllElements();
@@ -1814,6 +1843,9 @@ public class EntityUtil {
 		if (entity instanceof Gender) {
 			return I18N.getIcon("icon.small.gender");
 		}
+		if (entity instanceof Species) { // New if statement to get the Species Icon
+			return I18N.getIcon("icon.small.specchar");
+		}
 		if (entity instanceof Category) {
 			return I18N.getIcon("icon.small.category");
 		}
@@ -1911,6 +1943,12 @@ public class EntityUtil {
 			}
 			return I18N.getMsg("person.gender");
 		}
+		if (entity instanceof Species) { // New if statement to get the title for the Species Editor 
+			if (isTransient) {
+				return I18N.getMsg("manage.persons.species.new");
+			}
+			return I18N.getMsg("person.species");
+		}
 		if (entity instanceof Category) {
 			if (isTransient) {
 				return I18N.getMsg("persons.category");
@@ -1989,6 +2027,9 @@ public class EntityUtil {
 		}
 		if (entity instanceof Gender) {
 			return ((Gender)entity).getName();
+		}
+		if (entity instanceof Species) { // New if statement to get the Species name
+			return ((Species)entity).getName();
 		}
 		if (entity instanceof Category) {
 			return ((Category)entity).getName();

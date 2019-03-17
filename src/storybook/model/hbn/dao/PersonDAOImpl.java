@@ -29,6 +29,7 @@ import org.hibernate.criterion.Restrictions;
 import storybook.model.hbn.entity.AbstractEntity;
 import storybook.model.hbn.entity.Category;
 import storybook.model.hbn.entity.Person;
+import storybook.model.hbn.entity.Species;
 
 public class PersonDAOImpl extends SbGenericDAOImpl<Person, Long> implements PersonDAO {
 
@@ -92,6 +93,26 @@ public class PersonDAOImpl extends SbGenericDAOImpl<Person, Long> implements Per
 	public List<Person> findByCategories(List<Category> categories) {
 		Criteria crit = session.createCriteria(Person.class);
 		crit.add(Restrictions.in("category",categories));
+		crit.addOrder(Order.asc("firstname"));
+		crit.addOrder(Order.asc("lastname"));
+		List<Person> persons = (List<Person>) crit.list();
+		return persons;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Person> findBySpecies(Species species) {
+		Criteria crit = session.createCriteria(Person.class);
+		crit.add(Restrictions.eq("species", species));
+		crit.addOrder(Order.asc("firstname"));
+		crit.addOrder(Order.asc("lastname"));
+		List<Person> persons = (List<Person>) crit.list();
+		return persons;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Person> findBySpecies(List<Species> species) {
+		Criteria crit = session.createCriteria(Person.class);
+		crit.add(Restrictions.in("species",species));
 		crit.addOrder(Order.asc("firstname"));
 		crit.addOrder(Order.asc("lastname"));
 		List<Person> persons = (List<Person>) crit.list();
