@@ -18,8 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package storybook.model.handler;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JComponent;
 import javax.swing.ListCellRenderer;
 
 import storybook.model.hbn.dao.SbGenericDAOImpl;
@@ -70,5 +72,9 @@ public abstract class AbstractEntityHandler {
 
 	public ListCellRenderer getListCellRenderer() {
 		return null;
+	}
+	
+	public Boolean verifyNoDuplicates(ArrayList<JComponent> inputs) {
+		return true;
 	}
 }
