@@ -366,7 +366,7 @@ public class MainFrame extends JFrame implements IPaintable {
 		TabWindow tabWindow = new TabWindow(new SbView[]{chronoView,
 			bookView, manageView, readingView, memoriaView, scenesView,
 			personsView, relationshipView, locationsView, chaptersView, gendersView,
-			categoriesView, partsView, strandsView, ideasView, tagsView,
+			categoriesView, speciesView, partsView, strandsView, ideasView, tagsView,
 			itemsView, tagLinksView, itemLinksView, storyboard,
 			internalsView, attributesView, attributesListView,
 			chartPersonsByDate, chartPersonsByScene, chartWiWW,

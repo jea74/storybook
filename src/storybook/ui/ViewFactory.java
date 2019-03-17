@@ -136,7 +136,7 @@ public class ViewFactory {
 		} else if (ViewName.GENDERS.compare(view)) {
 			title="genders";
 		} else if (ViewName.SPECIES.compare(view)) { // New statement to get Species View title
-			title="persons.species";
+			title="person.species";
 		} else if (ViewName.CATEGORIES.compare(view)) {
 			title="persons.categories";
 		} else if (ViewName.STRANDS.compare(view)) {

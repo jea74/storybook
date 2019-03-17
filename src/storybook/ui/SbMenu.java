@@ -214,6 +214,7 @@ public class SbMenu {
     private JMenuItem tabPerson;
     private JMenuItem tabRelationship;
     private JMenuItem tabScene;
+    private JMenuItem tabSpecies; // New Species View menu item
     private JMenuItem tabStrand;
     private JMenuItem tabTag;
     private JMenuItem tabTagLink;
@@ -956,6 +957,12 @@ public class SbMenu {
 		});
         menuSecondaryObjects.add(tabGender);
 
+        tabSpecies = initMenuItem("", "", ' ', "species", "tabSpecies"); // New Menu item for Species View
+        tabSpecies.addActionListener((ActionEvent evt) -> {
+        	mainFrame.showAndFocus(SPECIES);
+        });
+        menuSecondaryObjects.add(tabSpecies);
+        		
         tabCategory = initMenuItem("16x32/manage_categories","",' ',"persons.category","tabCategory");
         tabCategory.addActionListener((ActionEvent evt) -> {
 			mainFrame.showAndFocus(CATEGORIES);
